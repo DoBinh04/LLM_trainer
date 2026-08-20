@@ -29,11 +29,15 @@ def main():
         for i in range(n):
             fname = f"{src}_{i:03d}.bin"
             print(f"[dl] {fname}")
-            p = hf_hub_download(REPO, fname, repo_type="dataset")
+            p = os.path.realpath(hf_hub_download(REPO, fname, repo_type="dataset"))
             dst = os.path.join(args.out, fname)
+            if os.path.lexists(dst) and not os.path.exists(dst):
+                os.remove(dst)  # broken link from an earlier run
             if not os.path.exists(dst):
-                os.link(p, dst) if os.stat(p).st_dev == os.stat(args.out).st_dev \
-                    else os.symlink(p, dst)
+                if os.stat(p).st_dev == os.stat(args.out).st_dev:
+                    os.link(p, dst)
+                else:
+                    os.symlink(p, dst)
     print("[dl] done ->", args.out)
 
 
