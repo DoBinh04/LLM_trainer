@@ -87,3 +87,12 @@ loss 2.799; generation is coherent for the scale.
 Method attribution: at 0.75B tokens the recipe alone (same data) accounts for
 65.57 → 36.36; the remaining gain to 25.51 comes from 5.6× more tokens plus the
 re-weighted mix.
+
+### Released checkpoint — full corpus (4.69B tokens, one epoch, every token once)
+
+Training on the whole downloaded corpus (8950 steps) lands at val loss 2.786,
+WikiText-2 ppl **24.91**, cutoff still certified (POST-2022 = 0.0000, PRE-2022
+= 0.236). This is the checkpoint published at
+[DoBinh/pit2022-gpt2-124m-muon](https://huggingface.co/DoBinh/pit2022-gpt2-124m-muon).
+The small 25.51 → 24.91 gain from +0.5B tokens confirms the curve is flattening —
+further wins should come from data (mix, quality) rather than more of the same tokens.
