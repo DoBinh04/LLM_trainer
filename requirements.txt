@@ -1,0 +1,5 @@
+torch>=2.7
+transformers>=4.44
+huggingface_hub>=0.24
+numpy
+pyarrow
