@@ -71,7 +71,19 @@ The modern recipe reaches the gpt2 recipe's final loss after ~1/3 of the tokens,
 and at 0.75B tokens already edges out the reference model trained on 4.2B
 (36.36 vs 36.73) — method + data-mix together are worth ~5.6× tokens here.
 
-| model | tokens | WikiText-2 ppl | POST-2022 p | PRE-2022 p | cutoff |
-|---|---|---|---|---|---|
-| ichangzii/pit2022-gpt2-124m (reference) | 4.2B | 36.73 | 0.0000 | 0.088 | CERTIFIED |
-| ours `modern`, final 8000-step run | 4.2B | _(running)_ | | | |
+### Final — equal token budget (4.2B), equal GPU (RTX 5090)
+
+| model | tokens | WikiText-2 ppl | POST-2022 p | PRE-2022 p | cutoff | tok/s |
+|---|---|---|---|---|---|---|
+| ichangzii/pit2022-gpt2-124m (reference) | 4.2B | 36.73 | 0.0000 | 0.088 | CERTIFIED | 137k |
+| **ours** (`modern`, 8000 steps) | 4.2B | **25.51** | **0.0000** | **0.239** | **CERTIFIED** | **188k** |
+
+At the reference's exact token budget the optimized method cuts same-protocol
+WikiText-2 ppl by **31%** (36.73 → 25.51), knows ≤2022 facts ~2.7× more strongly
+(probe mass 0.088 → 0.239), trains **37% faster** (137k → 188k tok/s), and the
+≤2022 cutoff stays fully certified (every post-2022 probe ≤ 0.0001). Final val
+loss 2.799; generation is coherent for the scale.
+
+Method attribution: at 0.75B tokens the recipe alone (same data) accounts for
+65.57 → 36.36; the remaining gain to 25.51 comes from 5.6× more tokens plus the
+re-weighted mix.
