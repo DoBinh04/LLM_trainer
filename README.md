@@ -55,4 +55,23 @@ free, the data cutoff is not.
 
 ## Results
 
-_(filled in as runs complete)_
+All numbers from THIS repo's evals (same protocol for every model: sliding-window
+ppl, window 1024 / stride 512; cutoff probe = mean p(answer) over the probe sets).
+Note: the reference README reports ppl 43.1 under a different windowing; under our
+protocol the same model scores **36.73** — that is the honest same-protocol baseline.
+
+### Ablation — same data, same 0.75B tokens, only the method changes
+
+| recipe | val loss | WikiText-2 ppl | tok/s (RTX 5090) |
+|---|---|---|---|
+| `gpt2` (AdamW + cosine, reference recipe) | 3.494 | 65.57 | ~189k |
+| `modern` (Muon + WSD + arch changes) | **3.056** | **36.36** | ~188k |
+
+The modern recipe reaches the gpt2 recipe's final loss after ~1/3 of the tokens,
+and at 0.75B tokens already edges out the reference model trained on 4.2B
+(36.36 vs 36.73) — method + data-mix together are worth ~5.6× tokens here.
+
+| model | tokens | WikiText-2 ppl | POST-2022 p | PRE-2022 p | cutoff |
+|---|---|---|---|---|---|
+| ichangzii/pit2022-gpt2-124m (reference) | 4.2B | 36.73 | 0.0000 | 0.088 | CERTIFIED |
+| ours `modern`, final 8000-step run | 4.2B | _(running)_ | | | |
